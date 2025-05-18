@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Encoder/Decoder Tool</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --light-color: #fff;
+            --error-color: #e74c3c;
+            --success-color: #27ae60;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--light-color);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-section {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex: 1;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .decode-btn {
+            background-color: #2c3e50;
+        }
+        
+        .decode-btn:hover {
+            background-color: #1a252f;
+        }
+        
+        .clear-btn {
+            background-color: #95a5a6;
+        }
+        
+        .clear-btn:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .copy-btn {
+            background-color: var(--success-color);
+            margin-top: 10px;
+        }
+        
+        .copy-btn:hover {
+            background-color: #219653;
+        }
+        
+        .copy-btn.copied {
+            background-color: #2ecc71;
+            animation: pulse 0.5s;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f0f4f8;
+            border-radius: 4px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .result-textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 14px;
+            margin-top: 10px;
+            background-color: white;
+        }
+        
+        .error {
+            color: var(--error-color);
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--primary-color);
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>URL Encoder/Decoder Tool</h1>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="encoder">URL Encoder</div>
+            <div class="tab" data-tab="decoder">URL Decoder</div>
+        </div>
+        
+        <div class="tab-content active" id="encoder">
+            <div class="tool-section">
+                <label for="encode-input">Text to encode:</label>
+                <textarea id="encode-input" placeholder="Enter text to encode as URL..."></textarea>
+                <div class="button-group">
+                    <button id="encode-btn">Encode URL</button>
+                    <button class="clear-btn" id="clear-encode">Clear</button>
+                </div>
+            </div>
+            
+            <div class="result" id="encode-result">
+                <p>Encoded result will appear here...</p>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="decoder">
+            <div class="tool-section">
+                <label for="decode-input">URL to decode:</label>
+                <textarea id="decode-input" placeholder="Enter URL encoded text to decode..."></textarea>
+                <div class="button-group">
+                    <button class="decode-btn" id="decode-btn">Decode URL</button>
+                    <button class="clear-btn" id="clear-decode">Clear</button>
+                </div>
+            </div>
+            
+            <div class="result" id="decode-result">
+                <p>Decoded result will appear here...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Encode functionality
+            const encodeBtn = document.getElementById('encode-btn');
+            const encodeInput = document.getElementById('encode-input');
+            const encodeResult = document.getElementById('encode-result');
+            const clearEncode = document.getElementById('clear-encode');
+            
+            encodeBtn.addEventListener('click', function() {
+                try {
+                    const text = encodeInput.value.trim();
+                    if (!text) {
+                        encodeResult.innerHTML = '<p class="error">Please enter text to encode</p>';
+                        return;
+                    }
+                    const encodedText = encodeURIComponent(text);
+                    encodeResult.innerHTML = `<p><strong>Encoded URL:</strong></p>
+                                            <textarea class="result-textarea" id="encoded-text" readonly>${encodedText}</textarea>
+                                            <button class="copy-btn" id="copy-encode">Copy to Clipboard</button>`;
+                    
+                    // Add reliable copy functionality
+                    setupCopyButton('copy-encode', 'encoded-text');
+                } catch (error) {
+                    encodeResult.innerHTML = `<p class="error">Error encoding text: ${error.message}</p>`;
+                }
+            });
+            
+            clearEncode.addEventListener('click', function() {
+                encodeInput.value = '';
+                encodeResult.innerHTML = '<p>Encoded result will appear here...</p>';
+            });
+            
+            // Decode functionality
+            const decodeBtn = document.getElementById('decode-btn');
+            const decodeInput = document.getElementById('decode-input');
+            const decodeResult = document.getElementById('decode-result');
+            const clearDecode = document.getElementById('clear-decode');
+            
+            decodeBtn.addEventListener('click', function() {
+                try {
+                    const text = decodeInput.value.trim();
+                    if (!text) {
+                        decodeResult.innerHTML = '<p class="error">Please enter URL encoded text to decode</p>';
+                        return;
+                    }
+                    const decodedText = decodeURIComponent(text);
+                    decodeResult.innerHTML = `<p><strong>Decoded Text:</strong></p>
+                                            <textarea class="result-textarea" id="decoded-text" readonly>${decodedText}</textarea>
+                                            <button class="copy-btn" id="copy-decode">Copy to Clipboard</button>`;
+                    
+                    // Add reliable copy functionality
+                    setupCopyButton('copy-decode', 'decoded-text');
+                } catch (error) {
+                    decodeResult.innerHTML = `<p class="error">Error decoding URL: ${error.message}</p>`;
+                }
+            });
+            
+            clearDecode.addEventListener('click', function() {
+                decodeInput.value = '';
+                decodeResult.innerHTML = '<p>Decoded result will appear here...</p>';
+            });
+            
+            // Universal reliable copy function
+            function setupCopyButton(buttonId, textareaId) {
+                const copyBtn = document.getElementById(buttonId);
+                copyBtn.addEventListener('click', function() {
+                    const textarea = document.getElementById(textareaId);
+                    
+                    // Select the text
+                    textarea.select();
+                    textarea.setSelectionRange(0, 99999); // For mobile devices
+                    
+                    try {
+                        // Try modern clipboard API first
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText(textarea.value).then(() => {
+                                showCopySuccess(copyBtn);
+                            }).catch(err => {
+                                fallbackCopy(textarea, copyBtn);
+                            });
+                        } else {
+                            fallbackCopy(textarea, copyBtn);
+                        }
+                    } catch (err) {
+                        fallbackCopy(textarea, copyBtn);
+                    }
+                });
+            }
+            
+            function fallbackCopy(textarea, button) {
+                try {
+                    // Fallback for older browsers
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        showCopySuccess(button);
+                    } else {
+                        showCopyError(button);
+                    }
+                } catch (err) {
+                    showCopyError(button);
+                }
+            }
+            
+            function showCopySuccess(button) {
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = 'Copy to Clipboard';
+                    button.classList.remove('copied');
+                }, 2000);
+            }
+            
+            function showCopyError(button) {
+                button.textContent = 'Press Ctrl+C to copy';
+                setTimeout(() => {
+                    button.textContent = 'Copy to Clipboard';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

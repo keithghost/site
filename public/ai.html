@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PREMIUM AI COMMAND CENTER</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #0f0f13;
+            color: var(--light);
+            margin: 0;
+            padding: 20px;
+            background-image: radial-gradient(circle at 25% 25%, rgba(108, 92, 231, 0.15) 0%, transparent 50%);
+            min-height: 100vh;
+        }
+        
+        .premium-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #fdcb6e, #e17055);
+            color: var(--dark);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 10px rgba(253, 203, 110, 0.3);
+        }
+        
+        .menu-container {
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            border-radius: 12px;
+            padding: 0;
+            background-color: rgba(20, 20, 30, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .user-info {
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.2), rgba(45, 52, 54, 0.5));
+            border-bottom: 1px solid rgba(108, 92, 231, 0.2);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+        }
+        
+        .info-item i {
+            margin-right: 8px;
+            color: var(--secondary);
+            font-size: 14px;
+        }
+        
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--light);
+            margin-bottom: 5px;
+        }
+        
+        .menu-header {
+            font-size: 20px;
+            font-weight: 700;
+            padding: 20px;
+            color: var(--light);
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-header::before, .menu-header::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(108, 92, 231, 0.5), transparent);
+            margin: 0 15px;
+        }
+        
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            padding: 20px;
+        }
+        
+        .menu-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: var(--light);
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: 100%;
+        }
+        
+        .menu-item a:hover {
+            background-color: rgba(108, 92, 231, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+        
+        .menu-item-number {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .menu-item-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .menu-footer {
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        @media (max-width: 600px) {
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-info {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="menu-container">
+        <div class="premium-badge">Premium</div>
+        
+        <div class="user-info">
+            <div>
+                <div class="greeting" id="greeting">Good Evening</div>
+                <div class="info-item">
+                    <i class="fas fa-robot"></i>
+                    <span>Premium AI Command Center</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-lock"></i>
+                <span>Secure Connection</span>
+            </div>
+        </div>
+        
+        <div class="menu-header">AI COMMAND CENTER</div>
+        
+        <div class="menu-items">
+            <div class="menu-item">
+                <a href="/bard">
+                    <span class="menu-item-number">1</span>
+                    <span class="menu-item-name">Google Bard AI</span>
+                </a>
+            </div>
+            
+            <div class="menu-item">
+                <a href="/blackbox">
+                    <span class="menu-item-number">2</span>
+                    <span class="menu-item-name">Blackbox AI</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="/deepseek">
+                    <span class="menu-item-number">3</span>
+                    <span class="menu-item-name">Deepseek AI</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="/gpt">
+                    <span class="menu-item-number">4</span>
+                    <span class="menu-item-name">ChatGPT</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="/ilama">
+                    <span class="menu-item-number">5</span>
+                    <span class="menu-item-name">iLlama AI</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="/metai">
+                    <span class="menu-item-number">6</span>
+                    <span class="menu-item-name">Meta AI</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="/search-ai">
+                    <span class="menu-item-number">7</span>
+                    <span class="menu-item-name">search AI</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="/vision">
+                    <span class="menu-item-number">8</span>
+                    <span class="menu-item-name">Vision AI</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="/gemini">
+                    <span class="menu-item-number">9</span>
+                    <span class="menu-item-name">Gemini AI</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="/catgpt">
+                    <span class="menu-item-number">10</span>
+                    <span class="menu-item-name">Cat gpt AI</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="/education-ai">
+                    <span class="menu-item-number">11</span>
+                    <span class="menu-item-name">Education AI</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="menu-footer">
+            © 2023 PREMIUM AI COMMAND CENTER | NEXT-GEN INTELLIGENCE
+        </div>
+    </div>
+
+    <script>
+        // Set greeting based on time of day
+        function setGreeting() {
+            const hour = new Date().getHours();
+            const greeting = document.getElementById('greeting');
+            
+            if (hour < 12) {
+                greeting.textContent = 'Good Morning';
+            } else if (hour < 18) {
+                greeting.textContent = 'Good Afternoon';
+            } else {
+                greeting.textContent = 'Good Evening';
+            }
+        }
+        
+        // Initialize all functions
+        window.onload = function() {
+            setGreeting();
+        };
+    </script>
+</body>
+</html>

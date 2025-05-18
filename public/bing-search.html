@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Bing Search by Keith</title>
+    <style>
+        :root {
+            --primary: #00809d;
+            --secondary: #f2f2f2;
+            --accent: #ffb900;
+            --light: #ffffff;
+            --dark: #202124;
+            --text: #3c4043;
+            --border: #dfe1e5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--light);
+            padding: 30px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--text);
+            opacity: 0.8;
+        }
+        
+        .search-container {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.1);
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.2);
+            border-color: rgba(223, 225, 229, 0);
+        }
+        
+        .search-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 30px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            background-color: #00667d;
+        }
+        
+        .results-container {
+            display: none;
+        }
+        
+        .result-item {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .result-title:hover {
+            text-decoration: underline;
+        }
+        
+        .result-link {
+            color: #202124;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .result-snippet {
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+        
+        .result-image {
+            max-width: 120px;
+            max-height: 120px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .error-message {
+            display: none;
+            background-color: #fce8e6;
+            color: #d93025;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 128, 157, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text);
+            font-size: 0.9rem;
+            margin-top: 50px;
+            border-top: 1px solid var(--border);
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .search-btn {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Premium Bing Search</div>
+            <div class="tagline">by Keith - Get the best search results</div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search the web..." id="searchInput">
+                <button class="search-btn" id="searchBtn">Search</button>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Searching the web...</p>
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            <h3>No results found!</h3>
+            <p>Try a different search term or check your internet connection.</p>
+        </div>
+        
+        <div class="results-container" id="resultsContainer">
+            <!-- Results will be added here dynamically -->
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            &copy; <span id="year"></span> Premium Bing Search by Keith. Powered by Bing API.
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('year').textContent = new Date().getFullYear();
+            
+            // DOM elements
+            const searchBtn = document.getElementById('searchBtn');
+            const searchInput = document.getElementById('searchInput');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const errorMessage = document.getElementById('errorMessage');
+            const loading = document.getElementById('loading');
+            
+            // Event listeners
+            searchBtn.addEventListener('click', searchBing);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchBing();
+                }
+            });
+            
+            // Search function
+            function searchBing() {
+                const searchTerm = searchInput.value.trim();
+                if (!searchTerm) return;
+                
+                showLoading();
+                fetchBingData(searchTerm);
+            }
+            
+            // Fetch data from API
+            function fetchBingData(searchTerm) {
+                fetch(`https://apis-keith.vercel.app/search/bing?query=${encodeURIComponent(searchTerm)}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        hideLoading();
+                        if (data.status && data.result.length > 0) {
+                            displayResults(data.result);
+                            errorMessage.style.display = 'none';
+                            resultsContainer.style.display = 'block';
+                        } else {
+                            showError();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        hideLoading();
+                        showError();
+                    });
+            }
+            
+            // Display results
+            function displayResults(results) {
+                resultsContainer.innerHTML = '';
+                
+                results.forEach(result => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    
+                    let imageHtml = '';
+                    if (result.image && !result.image.includes('w=32&h=32')) {
+                        imageHtml = `<img src="${result.image}" alt="${result.title}" class="result-image">`;
+                    }
+                    
+                    resultItem.innerHTML = `
+                        <a href="${result.link}" class="result-title" target="_blank">${result.title}</a>
+                        <div class="result-link">${result.link}</div>
+                        <p class="result-snippet">${result.snippet}</p>
+                        ${imageHtml}
+                    `;
+                    
+                    resultsContainer.appendChild(resultItem);
+                });
+            }
+            
+            // Loading state
+            function showLoading() {
+                loading.style.display = 'block';
+                resultsContainer.style.display = 'none';
+                errorMessage.style.display = 'none';
+            }
+            
+            function hideLoading() {
+                loading.style.display = 'none';
+            }
+            
+            // Error state
+            function showError() {
+                resultsContainer.style.display = 'none';
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

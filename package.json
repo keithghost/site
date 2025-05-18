@@ -1,0 +1,24 @@
+{
+  "name": "media-downloader",
+  "version": "1.0.0",
+  "description": "YouTube and TikTok downloader API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "form-data": "^4.0.0",
+    "axios": "^1.6.2",
+    "fs-extra": "^11.1.1",
+    "multer": "latest",
+    "ytdl-core": "^4.11.5",
+    "yt-search": "^2.10.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
