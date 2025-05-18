@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pair Code Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        input {
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #128C7E;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WhatsApp Pair Code</h1>
+        <input type="text" id="number" placeholder="Enter phone number with country code">
+        <button onclick="generatePair()">Generate Pair Code</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function generatePair() {
+            const number = document.getElementById('number').value;
+            if (!number) {
+                alert('Please enter a phone number');
+                return;
+            }
+
+            const response = await fetch(`/generate-pair?number=${encodeURIComponent(number)}`);
+            const data = await response.json();
+            
+            if (data.code) {
+                document.getElementById('result').innerHTML = `
+                    <strong>Pair Code:</strong> ${data.code}
+                `;
+            } else {
+                document.getElementById('result').innerHTML = "Error generating pair code";
+            }
+        }
+    </script>
+</body>
+</html>
